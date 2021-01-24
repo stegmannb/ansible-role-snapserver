@@ -14,7 +14,7 @@ name: Continuous Integration
 
 defaults:
   run:
-    working-directory: "stegmannb.template"
+    working-directory: "stegmannb.snapserver"
 
 jobs:
   pre-commit:
@@ -49,7 +49,7 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v2
         with:
-          path: "stegmannb.template"
+          path: "stegmannb.snapserver"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v2
