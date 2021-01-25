@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Bastian Stegmann
-  description: This is a template for Ansible roles.
+  description: This role installs and configures Snapcast Server on the host.
   license: MIT
   min_ansible_version: 2.9
   galaxy_tags: []
@@ -14,9 +14,5 @@ galaxy_info:
       versions:
         - 20.04
         - 18.04
-    - name: Fedora
-      versions:
-        - 33
-        - 32
 
 dependencies: []

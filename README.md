@@ -6,23 +6,25 @@
 
 ## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+To execute this role the [jmespath](https://pypi.org/project/jmespath/) package is required on the host machine.
+You can install it with `pip install jmespath`.
 
 ## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- `snapserver_update`: If `True` updates an existing snapserver package to the newest version from GitHub. (Default `True`)
+- `snapserver_port`: The port Snapserver listens on. (Default `1705`)
 
 ## Dependencies
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role requires the [community.general collection](https://galaxy.ansible.com/community/general?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW).
 
 ## Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: server
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: stegmannb.snapserver, become: true }
 
 ## License
 

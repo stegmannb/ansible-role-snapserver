@@ -1,0 +1,22 @@
+[Install]
+WantedBy=multi-user.target
+
+[Unit]
+Description=Snapcast server
+Documentation=man:snapserver(1)
+Wants=avahi-daemon.service
+After=network.target time-sync.target sound.target avahi-daemon.service
+
+[Service]
+EnvironmentFile=/etc/default/snapserver
+ExecStartPre=/bin/mkdir -m 0777 -p /tmp/audio
+ExecStartPre=/bin/chown -R snapserver:snapserver /tmp/audio
+ExecStart=/usr/bin/snapserver
+User=snapserver
+Group=snapserver
+# very noisy on stdout
+StandardOutput=null
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
