@@ -38,8 +38,6 @@ jobs:
         distro:
           - ubuntu2004
           - ubuntu1804
-          - fedora33
-          - fedora32
           - debian10
           - debian9
     steps:
