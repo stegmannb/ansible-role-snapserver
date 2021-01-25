@@ -1,3 +1,5 @@
 ---
 snapserver_update: true
 snapserver_logsink: null
+snapserver_user: snapserver
+snapserver_group: snapserver

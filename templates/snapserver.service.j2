@@ -9,11 +9,13 @@ After=network.target time-sync.target sound.target avahi-daemon.service
 
 [Service]
 EnvironmentFile=/etc/default/snapserver
-ExecStartPre=/bin/mkdir -m 0777 -p /tmp/audio
-ExecStartPre=/bin/chown -R snapserver:snapserver /tmp/audio
+{% if snapserver_tempdir is defined %}
+ExecStartPre=/bin/mkdir -m 0777 -p {{ snapserver_tempdir }}
+ExecStartPre=/bin/chown -R {{ snapserver_user }}:{{ snapserver_group }} {{ snapserver_tempdir }}
+{% endif %}
 ExecStart=/usr/bin/snapserver
-User=snapserver
-Group=snapserver
+User={{ snapserver_user }}
+Group={{ snapserver_group }}
 Restart=on-failure
 
 [Install]
