@@ -12,7 +12,7 @@ You can install it with `pip install jmespath`.
 ## Role Variables
 
 - `snapserver_update`: If `True` updates an existing snapserver package to the newest version from GitHub. (Default `True`)
-- `snapserver_port`: The port Snapserver listens on. (Default `1705`)
+- `snapserver_rpc_port`: The port Snapserver listens on. (Default `1705`)
 
 ## Dependencies
 

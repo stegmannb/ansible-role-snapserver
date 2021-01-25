@@ -27,21 +27,37 @@
 # - 0 will utilize just the processes main thread and might cause audio drops
 #   in case there are a couple of longer running tasks, such as encoding
 #   multiple audio streams
+{% if snapserver_threads is defined %}
+threads = {{ snapserver_threads }}
+{% else %}
 #threads = -1
+{% endif %}
 
 # the pid file when running as daemon
 #pidfile = /var/run/snapserver/pid
 
 # the user to run as when daemonized
+{% if snapserver_user is defined %}
+user = {{ snapserver_user }}
+{% else %}
 #user = snapserver
+{% endif %}
 # the group to run as when daemonized
+{% if snapserver_group is defined %}
+group = {{ snapserver_group }}
+{% else %}
 #group = snapserver
+{% endif %}
 
 # directory where persistent data is stored (server.json)
 # if empty, data dir will be
 #  - "/var/lib/snapserver/" when running as daemon
 #  - "$HOME/.config/snapserver/" when not running as daemon
+{% if snapserver_datadir is defined %}
+datadir = {{ snapserver_datadir }}
+{% else %}
 #datadir =
+{% endif %}
 
 #
 ###############################################################################
@@ -51,7 +67,11 @@
 #
 [http]
 # enable HTTP Json RPC (HTTP POST and websockets)
+{% if snapserver_rpc_enabled is defined %}
+enabled = {{ snapserver_rpc_enabled }}
+{% else %}
 #enabled = true
+{% endif %}
 
 # address to listen on, can be specified multiple times
 # use "0.0.0.0" to bind to any IPv4 address or :: to bind to any IPv6 address
@@ -84,11 +104,7 @@ doc_root = /usr/share/snapserver/snapweb
 #bind_to_address = 0.0.0.0
 
 # which port the server should listen to
-{% if snapserver_port is defined %}
-port = {{ snapserver_port }}
-{% else %}
 #port = 1705
-{% endif %}
 #
 ###############################################################################
 
@@ -119,7 +135,7 @@ port = {{ snapserver_port }}
 # Non blocking sources support the dryout_ms parameter: when no new data is read from the source, send silence to the clients
 # Available types are:
 # pipe: pipe:///<path/to/pipe>?name=<name>[&mode=create][&dryout_ms=2000], mode can be "create" or "read"
-# librespot: librespot:///<path/to/librespot>?name=<name>[&dryout_ms=2000][&username=<my username>&password=<my password>][&devicename=Snapcast][&bitrate=320][&wd_timeout=7800][&volume=100][&onevent=""][&nomalize=false][&autoplay=false]
+# librespot: librespot:///<path/to/librespot>?name=<name>[&dryout_ms=2000][&username=<my username>&password=<my password>][&devicename=Snapcast][&bitrate=320][&wd_timeout=7800][&volume=100][&onevent=""][&nomalize=false][&autoplay=false][&params=<generic librepsot process arguments>]
 #  note that you need to have the librespot binary on your machine
 #  sampleformat will be set to "44100:16:2"
 # file: file:///<path/to/PCM/file>?name=<name>
@@ -129,11 +145,16 @@ port = {{ snapserver_port }}
 #  sampleformat will be set to "44100:16:2"
 # tcp server: tcp://<listen IP, e.g. 127.0.0.1>:<port>?name=<name>[&mode=server]
 # tcp client: tcp://<server IP, e.g. 127.0.0.1>:<port>?name=<name>&mode=client
-# alsa: alsa://?name=<name>&device=<alsa device>
+# alsa: alsa://?name=<name>&device=<alsa device>[&send_silence=false][&idle_threshold=100]
+# meta: meta:///<name of source#1>/<name of source#2>/.../<name of source#N>?name=<name>
+{% if snapserver_sources is defined and snapserver_sources|length > 0 %}
+{% for source in snapserver_sources %}
+source = {{ source }}
+{% endfor %}
+{% else %}
+source = pipe:///tmp/snapfifo?name=default
 #source = tcp://127.0.0.1?name=mopidy_tcp
-source = pipe:///tmp/audio/spotify?name=Spotify&sampleformat=44100:16:2&codec=flac
-source = pipe:///tmp/audio/bluetooth?name=Bluetooth&sampleformat=48000:16:2&codec=flac
-source = pipe:///tmp/audio/notify?name=Notifications&sampleformat=48000:16:2&codec=flac
+{% endif %}
 
 # Default sample format
 #sampleformat = 48000:16:2
@@ -147,7 +168,7 @@ source = pipe:///tmp/audio/notify?name=Notifications&sampleformat=48000:16:2&cod
 #chunk_ms = 20
 
 # Buffer [ms]
-buffer = 1500
+#buffer = 1000
 
 # Send audio to muted clients
 #send_to_muted = false
@@ -161,10 +182,18 @@ buffer = 1500
 
 # log sink [null,system,stdout,stderr,file:<filename>]
 # when left empty: if running as daemon "system" else "stdout"
+{% if snapserver_logsink is defined %}
+sink = {{ snapserver_logsink }}
+{% else %}
 #sink =
+{% endif %}
 
 # log filter <tag>:<level>[,<tag>:<level>]*
 # with tag = * or <log tag> and level = [trace,debug,info,notice,warning,error,fatal]
+{% if snapserver_loglevel is defined %}
+filter = *:{{ snapserver_loglevel }}
+{% else %}
 #filter = *:info
+{% endif %}
 #
 ###############################################################################
