@@ -44,7 +44,7 @@
     snapserver_installed: "{{ snapserver_packages[0].version | regex_search('^[0-9.]+') }}"
   when: snapserver_packages|length == 1
 
-- name: Install latest release from github
+- name: Install latest release from GitHub.
   apt:
     deb: "https://github.com/badaix/snapcast/releases/download/\
       {{ github_release.tag_name }}/snapserver_\
