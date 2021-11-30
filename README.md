@@ -1,4 +1,4 @@
-# Ansible Template Role
+# Snapcast Server
 
 [![License: MIT](https://img.shields.io/github/license/stegmannb/ansible-role-snapserver)](https://github.com/stegmannb/ansible-role-snapserver/blob/master/LICENSE)
 ![Continuous Integration](https://github.com/stegmannb/ansible-role-snapserver/workflows/Continuous%20Integration/badge.svg)

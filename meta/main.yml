@@ -1,7 +1,9 @@
 ---
 galaxy_info:
   author: Bastian Stegmann
-  description: This role installs and configures Snapcast Server on the host.
+  description: This role installs and configures Snapcast server on the host.
+  role_name: snapcast_server
+  namespace: stegmannb
   license: MIT
   min_ansible_version: 2.9
   galaxy_tags: []

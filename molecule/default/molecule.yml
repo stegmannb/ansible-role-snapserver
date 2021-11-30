@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: podman
 platforms:
   - name: instance
     image: "geerlingguy/docker-${MOLECULE_DISTRO:-debian10}-ansible:latest"
@@ -18,5 +18,9 @@ lint: |
   flake8
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      debian:
+        ansible_python_interpreter: /usr/bin/python3
 verifier:
   name: ansible
