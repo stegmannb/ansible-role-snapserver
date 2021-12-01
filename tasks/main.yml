@@ -1,51 +1,53 @@
 ---
 - name: Check if running on a system based on Debian.
-  assert:
+  ansible.builtin.assert:
     that: ansible_facts['os_family'] == "Debian"
     fail_msg: This role only supports systems based on Debian.
     quiet: true
 
 - name: Check GitHub for the newest snapcast release.
-  uri:
+  ansible.builtin.uri:
     url: https://api.github.com/repos/badaix/snapcast/releases/latest
   register: github_snapcast
   run_once: true
 
 - name: Check GitHub version.
-  set_fact:
+  ansible.builtin.set_fact:
     github_release: "{{ github_snapcast.json }}"
     snapserver_github: "{{ github_snapcast.json.tag_name|regex_replace('[^0-9.]', '') }}"
 
 - name: Install required packages.
-  apt:
+  ansible.builtin.apt:
     name: python3-apt
     state: present
     cache_valid_time: 300
+  become: true
 
 - name: Gather package facts.
-  package_facts:
+  ansible.builtin.package_facts:
     manager: "apt"
+  become: true
 
 - name: Find installed snapserver packages.
-  set_fact:
+  ansible.builtin.set_fact:
     snapserver_packages: "{{ ansible_facts.packages|json_query(query) }}"
   vars:
     query: "*[]|[?contains(name,'snapserver')]"
 
 - name: Check installed snapserver packages.
-  assert:
+  ansible.builtin.assert:
     that: snapserver_packages|length <= 1
     fail_msg: There is more than one snapserver package installed.
     quiet: true
 
 - name: Check installed version.
-  set_fact:
+  ansible.builtin.set_fact:
     snapserver_package: "{{ snapserver_packages[0] }}"
     snapserver_installed: "{{ snapserver_packages[0].version | regex_search('^[0-9.]+') }}"
   when: snapserver_packages|length == 1
 
 - name: Install latest release from GitHub.
-  apt:
+  ansible.builtin.apt:
     deb: "https://github.com/badaix/snapcast/releases/download/\
       {{ github_release.tag_name }}/snapserver_\
       {{ github_release.tag_name | regex_replace('[^0-9.,]+', '') }}-1_\
@@ -58,36 +60,42 @@
     or (snapserver_update
         and snapserver_github|regex_replace('[^0-9.]', '') != snapserver_installed|regex_replace('[^0-9.]', '')
        )
+  become: true
   notify: Start snapserver service.
+
 - name: Install snapserver defaults.
-  template:
+  ansible.builtin.template:
     src: templates/snapserver.j2
     dest: /etc/default/snapserver
     owner: root
     group: root
     mode: "0644"
+  become: true
   notify: Restart snapserver service.
 
 - name: Install snapserver configuration.
-  template:
+  ansible.builtin.template:
     src: templates/snapserver.conf.j2
     dest: /etc/snapserver.conf
     owner: root
     group: root
     mode: "0644"
+  become: true
   notify: Restart snapserver service.
 
 - name: Install snapserver service.
-  template:
+  ansible.builtin.template:
     src: templates/snapserver.service.j2
     dest: /etc/systemd/system/snapserver.service
     owner: root
     group: root
     mode: "0644"
+  become: true
   notify: Restart snapserver service.
 
 - name: Enable snapserver service.
-  systemd:
+  ansible.builtin.systemd:
     name: snapserver
     daemon_reload: true
     enabled: true
+  become: true
