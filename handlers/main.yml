@@ -1,16 +1,18 @@
 ---
 - name: Start snapserver service.
-  systemd:
+  ansible.builtin.systemd:
     name: snapserver
     state: started
     daemon_reload: true
+  become: true
   register: snapserver_service_started
 
 - name: Restart snapserver service.
-  systemd:
+  ansible.builtin.systemd:
     name: snapserver
     state: restarted
     daemon_reload: true
+  become: true
   when: >-
     snapserver_service_started is not defined
     or not snapserver_service_started.changed
