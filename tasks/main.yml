@@ -16,11 +16,11 @@
     github_release: "{{ github_snapcast.json }}"
     snapserver_github: "{{ github_snapcast.json.tag_name|regex_replace('[^0-9.]', '') }}"
 
-- name: Install required packages.
+- name: Install required system packages.
   ansible.builtin.apt:
     name: python3-apt
     state: present
-    cache_valid_time: 300
+    cache_valid_time: "{{ apt_cache_valid_time | default(0) }}"
   become: true
 
 - name: Gather package facts.

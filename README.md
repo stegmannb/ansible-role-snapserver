@@ -24,7 +24,8 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: server
       roles:
-         - { role: stegmannb.snapserver, become: true }
+         - role: stegmannb.snapserver
+           become: true
 
 ## License
 
