@@ -15,6 +15,7 @@ You can install it with `pip install jmespath`.
 - `snapserver_rpc_port`: The port Snapserver listens on. (Default `1705`)
 - `snapserver_dirs_to_create`: (Default []) Create these directories before starting the snapcast server.
 - `snapserver_sources`: (Default []) List of sources for the snapcast server 
+- `snapserver_runtime_directory`: Runtime directory for the systemd service. [man systemd](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#RuntimeDirectory=)
 
 ## Dependencies
 

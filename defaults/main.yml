@@ -2,3 +2,4 @@
 snapserver_update: true
 snapserver_user: snapserver
 snapserver_group: snapserver
+snapserver_runtime_directory: snapserver
