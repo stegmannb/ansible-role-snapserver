@@ -9,7 +9,7 @@ After=network.target time-sync.target sound.target avahi-daemon.service
 
 [Service]
 EnvironmentFile=/etc/default/snapserver
-PermissionsStartOnly=True
+PermissionsStartOnly=true
 {% if snapserver_runtime_directory is defined %}
 RuntimeDirectory={{ snapserver_runtime_directory }}
 RuntimeDirectoryMode=0777
